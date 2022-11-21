@@ -53,7 +53,7 @@ resource "aws_subnet" "private-a" {
   }
 }
 
-#vpc
+#vpc sub
 
 resource "aws_subnet" "private-b" {
   vpc_id            = aws_vpc.vpc-local2.id
