@@ -6,7 +6,14 @@ terraform {
       version = "4.40.0"
     }
   }
+
+   backend "s3" {
+    bucket = "my-tf-test-bucket-tfstate"
+    key    = "terraform/state"
+    region = "us-east-1"
+  }
 }
+
 
 provider "aws" {
   region  = "us-east-1" #regiao mais barata
@@ -15,6 +22,9 @@ provider "aws" {
 #buckettf
 resource "aws_s3_bucket" "buckettf" {
   bucket = "my-tf-test-bucket-tfstate"
+  #   aws_s3_bucket_versioning {
+  #   enabled = true
+  # }
 
   tags = {
     Name        = "My bucket tf state"
@@ -28,6 +38,15 @@ resource "aws_s3_bucket" "buckettf" {
 resource "aws_s3_bucket_acl" "example" {
   bucket = aws_s3_bucket.buckettf.id
   acl    = "private"
+
+
+}
+#bucket
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = aws_s3_bucket.buckettf.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 #vpc
